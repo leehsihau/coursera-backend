@@ -7,8 +7,7 @@ var ExtractJwt = require('passport-jwt').ExtractJwt;
 var jwt = require('jsonwebtoken');
 
 var config = require('./config');
-
-exports.local = passport.use(new LocalStrategy(User.authenticate()));
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -20,7 +19,7 @@ var opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = config.secretKey;
 
-exports.jwtPassport = passport.use(new JwtStrategy(opts, function(jwt_payload, done){
+passport.use(new JwtStrategy(opts, function(jwt_payload, done){
     console.log("jwt payload: "+jwt_payload);
     User.findOne({id: jwt_payload.sub}, (err, user)=>{
         if(err){
